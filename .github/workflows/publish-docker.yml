@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     name: Build and Test
-    uses: deepetherlabs/actions/.github/workflows/test.yml@feat/EP-407
+    uses: deepetherlabs/actions/.github/workflows/test.yml@main
   publish:
     name: Build and Publish Docker
     runs-on: ubuntu-latest
