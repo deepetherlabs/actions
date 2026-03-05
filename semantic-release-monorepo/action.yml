@@ -1,0 +1,33 @@
+name: Semantic Release (Monorepo)
+description: Runs Semantic Release scoped to a module directory with per-module tags.
+
+inputs:
+  tag-prefix:
+    description: 'Prefix for git tags (e.g., "casino/v").'
+    required: true
+  working-directory:
+    description: 'Module directory to scope semantic-release to.'
+    required: true
+
+runs:
+  using: composite
+  steps:
+  - name: Copy resources
+    run: cp -a $GITHUB_ACTION_PATH/../semantic-release/resources/. .
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+  - name: Configure tag prefix
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+    run: |
+      sed -i 's|tagFormat: "${version}"|tagFormat: "${{ inputs.tag-prefix }}${version}"|' .releaserc.yml
+  - name: Setup dependencies
+    run: npm clean-install
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+  - name: Release
+    run: npx semantic-release
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
