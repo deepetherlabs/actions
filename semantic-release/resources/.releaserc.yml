@@ -7,9 +7,9 @@ tagFormat: "${version}"
 preset: "conventionalcommits"
 
 plugins:
-  - "@semantic-release/commit-analyzer"
+  - - "./filter-by-paths.cjs"
+    - preset: "conventionalcommits"
   - "semantic-release-commitlint"
-  - - "@semantic-release/release-notes-generator"
   - - "@semantic-release/git"
     - assets: []
       messsage: false
