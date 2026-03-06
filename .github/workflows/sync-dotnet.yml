@@ -20,7 +20,7 @@ jobs:
     - name: Execute Actions Template Sync
       uses: AndreasAugustin/actions-template-sync@v2
       with:
-        github_token: ${{ github.token }}
+        source_gh_token: ${{ github.token }}
         source_repo_path: ${{ github.repository_owner }}/sync-dotnet-template
         source_repo_ssh_private_key: ${{ secrets.SYNC_DOTNET_TEMPLATE_SSH_PRIVATE_KEY }}
         pr_title: Sync with .NET Template
