@@ -35,7 +35,7 @@ jobs:
       id: get_version
       uses: deepetherlabs/actions/version@main
     - name: Build and Publish v${{ steps.get_version.outputs.version }} using DevSpace
-      run: devspace build -t ${{ steps.get_version.outputs.version }}
+      run: VERSION=${{ steps.get_version.outputs.version }} devspace build -t ${{ steps.get_version.outputs.version }}
       env:
         GITHUB_ACTOR: ${{ github.actor }}
         GITHUB_TOKEN: ${{ github.token }}
