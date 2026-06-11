@@ -16,8 +16,6 @@ jobs:
       with:
         version: 3.x
         repo-token: ${{ github.token }}
-    - name: Install Homebrew
-      uses: Homebrew/actions/setup-homebrew@master
     - name: Run Test Task
       run: task test
       env:
