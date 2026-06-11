@@ -17,12 +17,18 @@ jobs:
         version: 3.x
         repo-token: ${{ github.token }}
     - name: Install Homebrew
-      uses: Homebrew/actions/setup-homebrew@master
+      uses: Homebrew/actions/setup-homebrew@2ebcf16054461267868620b1414507f3ccc765c1 # master
+    - name: Pin Homebrew to tag 5.1.15
+      run: |
+        git -C "$(brew --repository)" fetch --tags --force
+        git -C "$(brew --repository)" checkout 5.1.15
+        brew --version
     - name: Run Test Task
       run: task test
       env:
         GITHUB_ACTOR: ${{ github.actor }}
         GITHUB_TOKEN: ${{ github.token }}
+        HOMEBREW_NO_AUTO_UPDATE: "1"
     - name: .NET Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()
