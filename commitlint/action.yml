@@ -1,0 +1,26 @@
+name: Commitlint
+description: Lints commits against the same commitlint rules semantic-release enforces at release time
+
+inputs:
+  from:
+    description: Lint commits after this ref (exclusive)
+    required: true
+  to:
+    description: Lint commits up to this ref (inclusive)
+    required: true
+
+runs:
+  using: composite
+  steps:
+  - name: Setup dependencies
+    run: npm clean-install
+    shell: bash
+    working-directory: ${{ github.action_path }}/../semantic-release/resources
+  - name: Lint commits
+    run: >-
+      "${{ github.action_path }}/../semantic-release/resources/node_modules/.bin/commitlint"
+      --config "${{ github.action_path }}/../semantic-release/resources/.commitlintrc.yml"
+      --from "${{ inputs.from }}"
+      --to "${{ inputs.to }}"
+      --verbose
+    shell: bash
