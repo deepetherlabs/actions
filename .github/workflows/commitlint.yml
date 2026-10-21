@@ -1,0 +1,34 @@
+name: Commitlint
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  commitlint:
+    name: commitlint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Fetch shared commitlint config
+      uses: actions/checkout@v4
+      with:
+        repository: deepetherlabs/actions
+        path: .shared-actions
+    - name: Install commitlint
+      run: npm clean-install
+      working-directory: .shared-actions/semantic-release/resources
+    - name: Lint PR commits
+      # Same config semantic-release enforces at release time, so
+      # non-conforming commits are blocked here instead of failing
+      # the tag build on main.
+      run: |
+        .shared-actions/semantic-release/resources/node_modules/.bin/commitlint \
+          --config .shared-actions/semantic-release/resources/.commitlintrc.yml \
+          --from ${{ github.event.pull_request.base.sha }} \
+          --to ${{ github.event.pull_request.head.sha }} \
+          --verbose
