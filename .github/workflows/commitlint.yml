@@ -32,3 +32,13 @@ jobs:
           --from ${{ github.event.pull_request.base.sha }} \
           --to ${{ github.event.pull_request.head.sha }} \
           --verbose
+    - name: Lint PR title
+      # Repos squash-merge, so the PR title becomes the commit header on
+      # main and is what semantic-release validates. Callers must trigger
+      # on the `edited` pull_request type to re-run after a title change.
+      env:
+        PR_TITLE: ${{ github.event.pull_request.title }}
+      run: |
+        printf '%s' "$PR_TITLE" | .shared-actions/semantic-release/resources/node_modules/.bin/commitlint \
+          --config .shared-actions/semantic-release/resources/.commitlintrc.yml \
+          --verbose
